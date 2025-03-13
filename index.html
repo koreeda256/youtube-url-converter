@@ -36,20 +36,39 @@
             font-weight: 600;
             color: #0f0f0f;
         }
-        input {
-            width: 100%;
-            padding: 12px;
+        .input-container {
+            position: relative;
+            display: flex;
+            gap: 8px;
+            align-items: center;
             margin-bottom: 20px;
+        }
+        input {
+            flex: 1;
+            padding: 12px;
             border: 2px solid #e5e5e5;
             border-radius: 6px;
             font-size: 16px;
             box-sizing: border-box;
             transition: border-color 0.3s, box-shadow 0.3s;
         }
-        input:focus {
-            outline: none;
-            border-color: #065FD4;
-            box-shadow: 0 0 0 3px rgba(6, 95, 212, 0.1);
+        .clear-btn {
+            background: none;
+            border: none;
+            color: #777;
+            cursor: pointer;
+            padding: 8px;
+            margin: 0;
+            width: auto;
+            font-size: 18px;
+            line-height: 1;
+            transition: color 0.3s;
+        }
+        .clear-btn:hover {
+            color: #333;
+            background: none;
+            transform: none;
+            box-shadow: none;
         }
         button {
             background-color: #FF0000;
@@ -344,6 +363,13 @@
                 background-color: #1a2b4d;
                 color: #8ab4f8;
             }
+
+            .clear-btn {
+                color: #aaa;
+            }
+            .clear-btn:hover {
+                color: #fff;
+            }
         }
     </style>
 </head>
@@ -353,7 +379,10 @@
 
         <div>
             <label for="youtubeUrl">YouTube URLを入力：</label>
-            <input type="text" id="youtubeUrl" placeholder="例: https://www.youtube.com/watch?v=xxxx" onkeypress="handleKeyPress(event)" style="margin-bottom: 15px;">
+            <div class="input-container">
+                <input type="text" id="youtubeUrl" placeholder="例: https://www.youtube.com/watch?v=xxxx" onkeypress="handleKeyPress(event)">
+                <button class="clear-btn" onclick="clearInput()" title="入力をクリア">×</button>
+            </div>
             <button onclick="convertUrl()">変換</button>
         </div>
 
@@ -544,6 +573,11 @@
             setTimeout(() => {
                 statusElement.classList.add('hidden');
             }, 300);
+        }
+
+        function clearInput() {
+            document.getElementById('youtubeUrl').value = '';
+            document.getElementById('youtubeUrl').focus();
         }
     </script>
 </body>
