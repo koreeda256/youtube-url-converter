@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
+<!DOCTYPE html>
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -263,7 +265,7 @@
         <div>
             <label for="youtubeUrl">YouTube URLを入力</label>
             <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=xxxx または https://www.youtube.com/live/xxxx">
-            <button onclick="convertUrl()">変換</button>
+            <button id="convertButton" onclick="convertUrl()">変換</button>
         </div>
         
         <div id="statusMessage" class="status-message hidden"></div>
@@ -329,100 +331,5 @@
     <div class="footer">
         <p>© 2025 YouTube URL 変換ツール</p>
     </div>
-
-    <script>
-        function convertUrl() {
-            const url = document.getElementById('youtubeUrl').value.trim();
-            if (!url) {
-                showStatusMessage('URLを入力してください', 'error');
-                return;
-            }
-            
-            let videoId = extractVideoId(url);
-            
-            if (!videoId) {
-                showStatusMessage('有効なYouTube URLを入力してください', 'error');
-                return;
-            }
-            
-            // ステータスメッセージをクリア
-            hideStatusMessage();
-            
-            // 各形式のURLを設定
-            document.getElementById('watchFormat').textContent = `https://www.youtube.com/watch?v=${videoId}`;
-            document.getElementById('liveFormat').textContent = `https://www.youtube.com/live/${videoId}`;
-            document.getElementById('shortFormat').textContent = `https://youtu.be/${videoId}`;
-            
-            // 結果を表示
-            document.getElementById('resultContainer').classList.remove('hidden');
-        }
-        
-        function extractVideoId(url) {
-            let videoId = '';
-            
-            // watch?v= 形式
-            if (url.includes('watch?v=')) {
-                const match = url.match(/[?&]v=([^&#]*)/);
-                if (match && match[1]) {
-                    videoId = match[1];
-                }
-            } 
-            // live/ 形式
-            else if (url.includes('/live/')) {
-                const match = url.match(/\/live\/([^/?&#]*)/);
-                if (match && match[1]) {
-                    videoId = match[1];
-                }
-            } 
-            // youtu.be 形式
-            else if (url.includes('youtu.be/')) {
-                const match = url.match(/youtu\.be\/([^/?&#]*)/);
-                if (match && match[1]) {
-                    videoId = match[1];
-                }
-            }
-            
-            return videoId;
-        }
-        
-        function copyToClipboard(elementId, notificationId) {
-            const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    showNotification(notificationId);
-                })
-                .catch(err => {
-                    console.error('コピーに失敗しました', err);
-                    // フォールバック方法
-                    const el = document.createElement('textarea');
-                    el.value = text;
-                    el.style.position = 'absolute';
-                    el.style.left = '-9999px';
-                    document.body.appendChild(el);
-                    el.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(el);
-                    showNotification(notificationId);
-                });
-        }
-        
-        function showNotification(notificationId) {
-            const notification = document.getElementById(notificationId);
-            notification.classList.add('show');
-            
-            // 3秒後に通知を非表示にする
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        function showStatusMessage(message, type) {
-            const statusElement = document.getElementById('statusMessage');
-            statusElement.textContent = message;
-            statusElement.className = 'status-message';
-            statusElement.classList.add(type + '-message');
-            statusElement.classList.remove('hidden');
-        }
-        
-        function hideStatusMessage() {
-            const statusElement = document.
+</body>
+</html>
