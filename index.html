@@ -1,70 +1,220 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube URL 変換ツール</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            max-width: 800px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
         }
-        input, button {
-            padding: 10px;
-            margin: 5px 0;
+        h1 {
+            color: #cc0000;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input {
             width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
             box-sizing: border-box;
         }
-        .result {
-            margin-top: 20px;
+        button {
+            background-color: #cc0000;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #990000;
+        }
+        .result-container {
+            margin-top: 30px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        .result-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .result-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .result-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        .result-value {
             padding: 10px;
+            background: white;
             border: 1px solid #ddd;
-            background: #f9f9f9;
+            border-radius: 4px;
+            word-break: break-all;
+            margin-bottom: 5px;
+        }
+        .copy-btn {
+            background-color: #4285f4;
+            width: auto;
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+        .copy-btn:hover {
+            background-color: #3367d6;
+        }
+        .hidden {
+            display: none;
+        }
+        .footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 14px;
+            color: #777;
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>YouTube URL 変換ツール</h1>
-    <input type="text" id="youtubeUrl" placeholder="YouTube URLを入力してください">
-    <button onclick="convertUrl()">変換</button>
+    <div class="container">
+        <h1>YouTube URL 変換ツール</h1>
+        
+        <div>
+            <label for="youtubeUrl">YouTube URLを入力：</label>
+            <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=xxxx または https://www.youtube.com/live/xxxx">
+            <button onclick="convertUrl()">変換</button>
+        </div>
+        
+        <div id="resultContainer" class="result-container hidden">
+            <h2>変換結果</h2>
+            
+            <div class="result-item">
+                <div class="result-label">watch?v= 形式:</div>
+                <div id="watchFormat" class="result-value"></div>
+                <button onclick="copyToClipboard('watchFormat')" class="copy-btn">コピー</button>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">live/ 形式:</div>
+                <div id="liveFormat" class="result-value"></div>
+                <button onclick="copyToClipboard('liveFormat')" class="copy-btn">コピー</button>
+            </div>
+            
+            <div class="result-item">
+                <div class="result-label">短縮URL (youtu.be):</div>
+                <div id="shortFormat" class="result-value"></div>
+                <button onclick="copyToClipboard('shortFormat')" class="copy-btn">コピー</button>
+            </div>
+        </div>
+    </div>
     
-    <div class="result">
-        <h3>変換結果:</h3>
-        <p><strong>watch?v= 形式:</strong> <span id="watchFormat"></span> <button onclick="copyToClipboard('watchFormat')">コピー</button></p>
-        <p><strong>live/ 形式:</strong> <span id="liveFormat"></span> <button onclick="copyToClipboard('liveFormat')">コピー</button></p>
-        <p><strong>短縮URL:</strong> <span id="shortFormat"></span> <button onclick="copyToClipboard('shortFormat')">コピー</button></p>
+    <div class="footer">
+        <p>© 2025 YouTube URL 変換ツール</p>
     </div>
 
     <script>
         function convertUrl() {
-            const url = document.getElementById('youtubeUrl').value;
+            const url = document.getElementById('youtubeUrl').value.trim();
+            if (!url) {
+                alert('URLを入力してください');
+                return;
+            }
+            
+            let videoId = extractVideoId(url);
+            
+            if (!videoId) {
+                alert('有効なYouTube URLを入力してください');
+                return;
+            }
+            
+            // 各形式のURLを設定
+            document.getElementById('watchFormat').textContent = `https://www.youtube.com/watch?v=${videoId}`;
+            document.getElementById('liveFormat').textContent = `https://www.youtube.com/live/${videoId}`;
+            document.getElementById('shortFormat').textContent = `https://youtu.be/${videoId}`;
+            
+            // 結果を表示
+            document.getElementById('resultContainer').classList.remove('hidden');
+        }
+        
+        function extractVideoId(url) {
             let videoId = '';
             
-            // VideoID を抽出
+            // watch?v= 形式
             if (url.includes('watch?v=')) {
-                videoId = url.split('watch?v=')[1].split('&')[0];
-            } else if (url.includes('live/')) {
-                videoId = url.split('live/')[1].split('?')[0];
-            } else if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1].split('?')[0];
+                const match = url.match(/[?&]v=([^&#]*)/);
+                if (match && match[1]) {
+                    videoId = match[1];
+                }
+            } 
+            // live/ 形式
+            else if (url.includes('/live/')) {
+                const match = url.match(/\/live\/([^/?&#]*)/);
+                if (match && match[1]) {
+                    videoId = match[1];
+                }
+            } 
+            // youtu.be 形式
+            else if (url.includes('youtu.be/')) {
+                const match = url.match(/youtu\.be\/([^/?&#]*)/);
+                if (match && match[1]) {
+                    videoId = match[1];
+                }
             }
             
-            if (videoId) {
-                document.getElementById('watchFormat').textContent = `https://www.youtube.com/watch?v=${videoId}`;
-                document.getElementById('liveFormat').textContent = `https://www.youtube.com/live/${videoId}`;
-                document.getElementById('shortFormat').textContent = `https://youtu.be/${videoId}`;
-            } else {
-                alert('有効なYouTube URLを入力してください');
-            }
+            return videoId;
         }
         
         function copyToClipboard(elementId) {
             const text = document.getElementById(elementId).textContent;
             navigator.clipboard.writeText(text)
-                .then(() => alert('コピーしました'))
-                .catch(err => console.error('コピーに失敗しました', err));
+                .then(() => {
+                    alert('コピーしました: ' + text);
+                })
+                .catch(err => {
+                    console.error('コピーに失敗しました', err);
+                    // フォールバック方法
+                    const el = document.createElement('textarea');
+                    el.value = text;
+                    document.body.appendChild(el);
+                    el.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(el);
+                    alert('コピーしました: ' + text);
+                });
         }
     </script>
 </body>
