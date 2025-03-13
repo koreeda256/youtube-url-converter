@@ -3,7 +3,7 @@
 ## これは何
 
 - YouTube LiveのURL形式を変更するWebアプリケーションです
-- YouTube Liveでは、以下の3通りのURL形式が使われています（他にもあります・それらの形式は本アプリケーション未対応です）
+- YouTube Liveでは、以下の3通りのURL形式が使われています（他にもあります；それらの形式は本アプリケーション未対応です）
   - 形式1: `https://youtube.com/watch?v={LiveId}`
   - 形式2: `https://www.youtube.com/live/{LiveId}`
   - 形式3: `https://www.youtu.be/{LiveId}`
