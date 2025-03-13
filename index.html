@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>YouTube URL 変換ツール</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        input, button {
+            padding: 10px;
+            margin: 5px 0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>YouTube URL 変換ツール</h1>
+    <input type="text" id="youtubeUrl" placeholder="YouTube URLを入力してください">
+    <button onclick="convertUrl()">変換</button>
+    
+    <div class="result">
+        <h3>変換結果:</h3>
+        <p><strong>watch?v= 形式:</strong> <span id="watchFormat"></span> <button onclick="copyToClipboard('watchFormat')">コピー</button></p>
+        <p><strong>live/ 形式:</strong> <span id="liveFormat"></span> <button onclick="copyToClipboard('liveFormat')">コピー</button></p>
+        <p><strong>短縮URL:</strong> <span id="shortFormat"></span> <button onclick="copyToClipboard('shortFormat')">コピー</button></p>
+    </div>
+
+    <script>
+        function convertUrl() {
+            const url = document.getElementById('youtubeUrl').value;
+            let videoId = '';
+            
+            // VideoID を抽出
+            if (url.includes('watch?v=')) {
+                videoId = url.split('watch?v=')[1].split('&')[0];
+            } else if (url.includes('live/')) {
+                videoId = url.split('live/')[1].split('?')[0];
+            } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            }
+            
+            if (videoId) {
+                document.getElementById('watchFormat').textContent = `https://www.youtube.com/watch?v=${videoId}`;
+                document.getElementById('liveFormat').textContent = `https://www.youtube.com/live/${videoId}`;
+                document.getElementById('shortFormat').textContent = `https://youtu.be/${videoId}`;
+            } else {
+                alert('有効なYouTube URLを入力してください');
+            }
+        }
+        
+        function copyToClipboard(elementId) {
+            const text = document.getElementById(elementId).textContent;
+            navigator.clipboard.writeText(text)
+                .then(() => alert('コピーしました'))
+                .catch(err => console.error('コピーに失敗しました', err));
+        }
+    </script>
+</body>
+</html>
