@@ -62,6 +62,7 @@
             margin-bottom: 15px;
             padding-bottom: 15px;
             border-bottom: 1px solid #eee;
+            position: relative;
         }
         .result-item:last-child {
             border-bottom: none;
@@ -72,6 +73,23 @@
             font-weight: bold;
             margin-bottom: 5px;
             color: #555;
+            display: flex;
+            align-items: center;
+        }
+        .discord-badge {
+            background-color: #5865F2;
+            color: white;
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+            display: inline-flex;
+            align-items: center;
+        }
+        .discord-icon {
+            width: 16px;
+            height: 16px;
+            margin-right: 4px;
         }
         .result-value {
             padding: 10px;
@@ -99,6 +117,61 @@
             font-size: 14px;
             color: #777;
         }
+        .copy-notification {
+            position: absolute;
+            right: 10px;
+            bottom: 15px;
+            background-color: #4caf50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .copy-notification.show {
+            opacity: 1;
+        }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 8px;
+            cursor: help;
+        }
+        .tooltip .tooltip-icon {
+            background-color: #777;
+            color: white;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -100px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-weight: normal;
+            font-size: 12px;
+        }
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
         @media (max-width: 600px) {
             body {
                 padding: 10px;
@@ -123,23 +196,49 @@
             <h2>変換結果</h2>
             
             <div class="result-item">
-                <div class="result-label">watch?v= 形式（Discord Watch Together対応）</div>
+                <div class="result-label">
+                    watch?v= 形式:
+                    <div class="discord-badge">
+                        <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff">
+                            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+                        </svg>
+                        Discord対応
+                    </div>
+                    <div class="tooltip">
+                        <div class="tooltip-icon">?</div>
+                        <span class="tooltip-text">この形式はDiscord Watch Together機能で使用できます</span>
+                    </div>
+                </div>
                 <div id="watchFormat" class="result-value"></div>
-                <button onclick="copyToClipboard('watchFormat')" class="copy-btn">コピー</button>
-            </div>
-
-            <div class="result-item">
-                <div class="result-label">短縮URL（youtu.be）（Discord Watch Together対応）</div>
-                <div id="shortFormat" class="result-value"></div>
-                <button onclick="copyToClipboard('shortFormat')" class="copy-btn">コピー</button>
+                <button onclick="copyToClipboard('watchFormat', 'notification1')" class="copy-btn">コピー</button>
+                <div id="notification1" class="copy-notification">コピーしました！</div>
             </div>
             
             <div class="result-item">
-                <div class="result-label">live/ 形式（Discord Watch Together対応）</div>
+                <div class="result-label">live/ 形式:</div>
                 <div id="liveFormat" class="result-value"></div>
-                <button onclick="copyToClipboard('liveFormat')" class="copy-btn">コピー</button>
+                <button onclick="copyToClipboard('liveFormat', 'notification2')" class="copy-btn">コピー</button>
+                <div id="notification2" class="copy-notification">コピーしました！</div>
             </div>
-
+            
+            <div class="result-item">
+                <div class="result-label">
+                    短縮URL (youtu.be):
+                    <div class="discord-badge">
+                        <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff">
+                            <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
+                        </svg>
+                        Discord対応
+                    </div>
+                    <div class="tooltip">
+                        <div class="tooltip-icon">?</div>
+                        <span class="tooltip-text">この形式はDiscord Watch Together機能で使用できます</span>
+                    </div>
+                </div>
+                <div id="shortFormat" class="result-value"></div>
+                <button onclick="copyToClipboard('shortFormat', 'notification3')" class="copy-btn">コピー</button>
+                <div id="notification3" class="copy-notification">コピーしました！</div>
+            </div>
         </div>
     </div>
     
@@ -199,11 +298,11 @@
             return videoId;
         }
         
-        function copyToClipboard(elementId) {
+        function copyToClipboard(elementId, notificationId) {
             const text = document.getElementById(elementId).textContent;
             navigator.clipboard.writeText(text)
                 .then(() => {
-                    alert('コピーしました: ' + text);
+                    showNotification(notificationId);
                 })
                 .catch(err => {
                     console.error('コピーに失敗しました', err);
@@ -214,8 +313,18 @@
                     el.select();
                     document.execCommand('copy');
                     document.body.removeChild(el);
-                    alert('コピーしました: ' + text);
+                    showNotification(notificationId);
                 });
+        }
+        
+        function showNotification(notificationId) {
+            const notification = document.getElementById(notificationId);
+            notification.classList.add('show');
+            
+            // 3秒後に通知を非表示にする
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
         }
     </script>
 </body>
