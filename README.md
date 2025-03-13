@@ -7,7 +7,7 @@
   - 形式1: `https://youtube.com/watch?v={LiveId}`
   - 形式2: `https://www.youtube.com/live/{LiveId}`
   - 形式3: `https://www.youtu.be/{LiveId}`
-- このアプリケーションを使うことで、これらのURL形式を相互変換することができます
+- このアプリケーションを使うことで、形式1--3を相互変換することができます
 
 ## 背景
 
