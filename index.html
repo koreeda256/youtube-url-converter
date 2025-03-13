@@ -5,23 +5,55 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube URL 変換ツール</title>
     <style>
+        :root {
+            --primary-color: #cc0000;
+            --primary-hover: #990000;
+            --accent-color: #4285f4;
+            --accent-hover: #3367d6;
+            --discord-color: #5865F2;
+            --success-color: #4caf50;
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+            --card-bg: white;
+            --border-color: #ddd;
+            --result-bg: #f5f5f5;
+            --footer-color: #777;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --primary-color: #ff4444;
+                --primary-hover: #ff6666;
+                --accent-color: #5c9aff;
+                --accent-hover: #7cafff;
+                --discord-color: #7289da;
+                --success-color: #66bb6a;
+                --text-color: #e0e0e0;
+                --bg-color: #121212;
+                --card-bg: #1e1e1e;
+                --border-color: #444;
+                --result-bg: #2a2a2a;
+                --footer-color: #999;
+            }
+        }
+
         body {
             font-family: 'Helvetica Neue', Arial, sans-serif;
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f9f9f9;
-            color: #333;
+            background-color: var(--bg-color);
+            color: var(--text-color);
         }
         h1 {
-            color: #cc0000;
+            color: var(--primary-color);
             text-align: center;
             margin-bottom: 30px;
             font-size: 28px;
             white-space: nowrap;
         }
         .container {
-            background: white;
+            background: var(--card-bg);
             border-radius: 8px;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -35,13 +67,15 @@
             width: 100%;
             padding: 12px;
             margin-bottom: 20px;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 16px;
             box-sizing: border-box;
+            background-color: var(--card-bg);
+            color: var(--text-color);
         }
         button {
-            background-color: #cc0000;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             padding: 12px 20px;
@@ -52,18 +86,18 @@
             width: 100%;
         }
         button:hover {
-            background-color: #990000;
+            background-color: var(--primary-hover);
         }
         .result-container {
             margin-top: 30px;
-            background: #f5f5f5;
+            background: var(--result-bg);
             border-radius: 8px;
             padding: 20px;
         }
         .result-item {
             margin-bottom: 20px;
             padding-bottom: 20px;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--border-color);
             position: relative;
         }
         .result-item:last-child {
@@ -74,15 +108,16 @@
         .result-header {
             display: flex;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
             margin-bottom: 8px;
         }
         .result-label {
             font-weight: bold;
-            color: #555;
-            margin-right: 10px;
+            color: var(--text-color);
         }
         .discord-badge {
-            background-color: #5865F2;
+            background-color: var(--discord-color);
             color: white;
             font-size: 12px;
             padding: 3px 8px;
@@ -100,8 +135,8 @@
         }
         .result-value {
             padding: 12px;
-            background: white;
-            border: 1px solid #ddd;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             word-break: break-all;
             margin-bottom: 10px;
@@ -111,24 +146,25 @@
         .action-row {
             display: flex;
             align-items: center;
+            position: relative;
         }
         .copy-btn {
-            background-color: #4285f4;
+            background-color: var(--accent-color);
             width: auto;
             padding: 8px 15px;
             font-size: 14px;
-            margin-right: 10px;
         }
         .copy-btn:hover {
-            background-color: #3367d6;
+            background-color: var(--accent-hover);
         }
         .copy-notification {
-            background-color: #4caf50;
+            background-color: var(--success-color);
             color: white;
             padding: 5px 10px;
             border-radius: 4px;
             font-size: 14px;
-            display: inline-block;
+            position: absolute;
+            left: 100px;
             opacity: 0;
             transition: opacity 0.3s;
         }
@@ -142,17 +178,16 @@
             margin-top: 30px;
             text-align: center;
             font-size: 14px;
-            color: #777;
+            color: var(--footer-color);
         }
         .tooltip {
             position: relative;
             display: inline-block;
-            margin-left: 8px;
             cursor: help;
         }
         .tooltip .tooltip-icon {
-            background-color: #777;
-            color: white;
+            background-color: var(--footer-color);
+            color: var(--card-bg);
             width: 16px;
             height: 16px;
             border-radius: 50%;
@@ -165,8 +200,8 @@
         .tooltip .tooltip-text {
             visibility: hidden;
             width: 200px;
-            background-color: #555;
-            color: #fff;
+            background-color: var(--result-bg);
+            color: var(--text-color);
             text-align: center;
             border-radius: 6px;
             padding: 5px;
@@ -179,6 +214,7 @@
             transition: opacity 0.3s;
             font-weight: normal;
             font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         .tooltip:hover .tooltip-text {
             visibility: visible;
@@ -192,12 +228,12 @@
             font-weight: bold;
         }
         .error-message {
-            background-color: #ffebee;
-            color: #c62828;
+            background-color: rgba(198, 40, 40, 0.2);
+            color: #e57373;
         }
         .info-message {
-            background-color: #e3f2fd;
-            color: #1565c0;
+            background-color: rgba(21, 101, 192, 0.2);
+            color: #64b5f6;
         }
         @media (max-width: 600px) {
             body {
@@ -209,33 +245,13 @@
             h1 {
                 font-size: 20px;
             }
-            .result-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .discord-badge {
-                margin-top: 5px;
-                margin-left: 0;
-            }
-            .tooltip {
-                margin-top: 5px;
-                margin-left: 0;
-            }
         }
         @media (max-width: 400px) {
-            .action-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .copy-btn {
-                margin-bottom: 10px;
-                width: 100%;
-            }
             .copy-notification {
-                display: block;
-                width: 100%;
-                box-sizing: border-box;
-                text-align: center;
+                position: static;
+                margin-top: 5px;
+                margin-left: 0;
+                display: inline-block;
             }
         }
     </style>
@@ -245,7 +261,7 @@
         <h1>YouTube URL 変換ツール</h1>
         
         <div>
-            <label for="youtubeUrl">YouTube URLを入力：</label>
+            <label for="youtubeUrl">YouTube URLを入力</label>
             <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=xxxx または https://www.youtube.com/live/xxxx">
             <button onclick="convertUrl()">変換</button>
         </div>
@@ -257,7 +273,7 @@
             
             <div class="result-item">
                 <div class="result-header">
-                    <div class="result-label">watch?v= 形式:</div>
+                    <div class="result-label">watch?v= 形式</div>
                     <div class="discord-badge">
                         <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff">
                             <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
@@ -278,7 +294,7 @@
             
             <div class="result-item">
                 <div class="result-header">
-                    <div class="result-label">live/ 形式:</div>
+                    <div class="result-label">live/ 形式</div>
                 </div>
                 <div id="liveFormat" class="result-value"></div>
                 <div class="action-row">
@@ -289,7 +305,7 @@
             
             <div class="result-item">
                 <div class="result-header">
-                    <div class="result-label">短縮URL (youtu.be):</div>
+                    <div class="result-label">短縮URL (youtu.be)</div>
                     <div class="discord-badge">
                         <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff">
                             <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
@@ -409,9 +425,4 @@
         }
         
         function hideStatusMessage() {
-            const statusElement = document.getElementById('statusMessage');
-            statusElement.classList.add('hidden');
-        }
-    </script>
-</body>
-</html>
+            const statusElement = document.
