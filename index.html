@@ -393,6 +393,16 @@
             document.getElementById('watchFormat').textContent = `https://www.youtube.com/watch?v=${videoId}`;
             document.getElementById('liveFormat').textContent = `https://www.youtube.com/live/${videoId}`;
             document.getElementById('shortFormat').textContent = `https://youtu.be/${videoId}`;
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // 入力フィールドでエンターキーが押されたときに変換を実行
+                document.getElementById('youtubeUrl').addEventListener('keypress', function(event) {
+                    if (event.key === 'Enter') {
+                        event.preventDefault(); // デフォルトのフォーム送信を防止
+                        convertUrl();
+                    }
+                });
+            });
             
             // 結果を表示
             document.getElementById('resultContainer').classList.remove('hidden');
@@ -463,6 +473,11 @@
             statusElement.className = 'status-message';
             statusElement.classList.add(type + '-message');
             statusElement.classList.remove('hidden');
+
+            // 3秒後に通知を非表示にする
+            setTimeout(() => {
+                statusElement.classList.add('hidden');
+            }, 3000);
         }
         
         function hideStatusMessage() {
