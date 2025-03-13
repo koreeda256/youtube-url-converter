@@ -17,6 +17,8 @@
             color: #cc0000;
             text-align: center;
             margin-bottom: 30px;
+            font-size: 28px;
+            white-space: nowrap;
         }
         .container {
             background: white;
@@ -59,8 +61,8 @@
             padding: 20px;
         }
         .result-item {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
             border-bottom: 1px solid #eee;
             position: relative;
         }
@@ -69,12 +71,15 @@
             margin-bottom: 0;
             padding-bottom: 0;
         }
-        .result-label {
-            font-weight: bold;
-            margin-bottom: 5px;
-            color: #555;
+        .result-header {
             display: flex;
             align-items: center;
+            margin-bottom: 8px;
+        }
+        .result-label {
+            font-weight: bold;
+            color: #555;
+            margin-right: 10px;
         }
         .discord-badge {
             background-color: #5865F2;
@@ -82,31 +87,53 @@
             font-size: 12px;
             padding: 3px 8px;
             border-radius: 12px;
-            margin-left: 10px;
             display: inline-flex;
             align-items: center;
+            height: 20px;
         }
         .discord-icon {
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             margin-right: 4px;
+            display: inline-block;
+            vertical-align: middle;
         }
         .result-value {
-            padding: 10px;
+            padding: 12px;
             background: white;
             border: 1px solid #ddd;
             border-radius: 4px;
             word-break: break-all;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+        .action-row {
+            display: flex;
+            align-items: center;
         }
         .copy-btn {
             background-color: #4285f4;
             width: auto;
             padding: 8px 15px;
             font-size: 14px;
+            margin-right: 10px;
         }
         .copy-btn:hover {
             background-color: #3367d6;
+        }
+        .copy-notification {
+            background-color: #4caf50;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-block;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .copy-notification.show {
+            opacity: 1;
         }
         .hidden {
             display: none;
@@ -116,21 +143,6 @@
             text-align: center;
             font-size: 14px;
             color: #777;
-        }
-        .copy-notification {
-            position: absolute;
-            right: 10px;
-            bottom: 15px;
-            background-color: #4caf50;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            font-size: 12px;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .copy-notification.show {
-            opacity: 1;
         }
         .tooltip {
             position: relative;
@@ -172,12 +184,58 @@
             visibility: visible;
             opacity: 1;
         }
+        .status-message {
+            text-align: center;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .info-message {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
         @media (max-width: 600px) {
             body {
                 padding: 10px;
             }
             .container {
                 padding: 15px;
+            }
+            h1 {
+                font-size: 20px;
+            }
+            .result-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .discord-badge {
+                margin-top: 5px;
+                margin-left: 0;
+            }
+            .tooltip {
+                margin-top: 5px;
+                margin-left: 0;
+            }
+        }
+        @media (max-width: 400px) {
+            .action-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .copy-btn {
+                margin-bottom: 10px;
+                width: 100%;
+            }
+            .copy-notification {
+                display: block;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
             }
         }
     </style>
@@ -192,12 +250,14 @@
             <button onclick="convertUrl()">変換</button>
         </div>
         
+        <div id="statusMessage" class="status-message hidden"></div>
+        
         <div id="resultContainer" class="result-container hidden">
             <h2>変換結果</h2>
             
             <div class="result-item">
-                <div class="result-label">
-                    watch?v= 形式:
+                <div class="result-header">
+                    <div class="result-label">watch?v= 形式:</div>
                     <div class="discord-badge">
                         <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff">
                             <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
@@ -210,20 +270,26 @@
                     </div>
                 </div>
                 <div id="watchFormat" class="result-value"></div>
-                <button onclick="copyToClipboard('watchFormat', 'notification1')" class="copy-btn">コピー</button>
-                <div id="notification1" class="copy-notification">コピーしました！</div>
+                <div class="action-row">
+                    <button onclick="copyToClipboard('watchFormat', 'notification1')" class="copy-btn">コピー</button>
+                    <div id="notification1" class="copy-notification">コピーしました！</div>
+                </div>
             </div>
             
             <div class="result-item">
-                <div class="result-label">live/ 形式:</div>
+                <div class="result-header">
+                    <div class="result-label">live/ 形式:</div>
+                </div>
                 <div id="liveFormat" class="result-value"></div>
-                <button onclick="copyToClipboard('liveFormat', 'notification2')" class="copy-btn">コピー</button>
-                <div id="notification2" class="copy-notification">コピーしました！</div>
+                <div class="action-row">
+                    <button onclick="copyToClipboard('liveFormat', 'notification2')" class="copy-btn">コピー</button>
+                    <div id="notification2" class="copy-notification">コピーしました！</div>
+                </div>
             </div>
             
             <div class="result-item">
-                <div class="result-label">
-                    短縮URL (youtu.be):
+                <div class="result-header">
+                    <div class="result-label">短縮URL (youtu.be):</div>
                     <div class="discord-badge">
                         <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff">
                             <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
@@ -236,8 +302,10 @@
                     </div>
                 </div>
                 <div id="shortFormat" class="result-value"></div>
-                <button onclick="copyToClipboard('shortFormat', 'notification3')" class="copy-btn">コピー</button>
-                <div id="notification3" class="copy-notification">コピーしました！</div>
+                <div class="action-row">
+                    <button onclick="copyToClipboard('shortFormat', 'notification3')" class="copy-btn">コピー</button>
+                    <div id="notification3" class="copy-notification">コピーしました！</div>
+                </div>
             </div>
         </div>
     </div>
@@ -250,16 +318,19 @@
         function convertUrl() {
             const url = document.getElementById('youtubeUrl').value.trim();
             if (!url) {
-                alert('URLを入力してください');
+                showStatusMessage('URLを入力してください', 'error');
                 return;
             }
             
             let videoId = extractVideoId(url);
             
             if (!videoId) {
-                alert('有効なYouTube URLを入力してください');
+                showStatusMessage('有効なYouTube URLを入力してください', 'error');
                 return;
             }
+            
+            // ステータスメッセージをクリア
+            hideStatusMessage();
             
             // 各形式のURLを設定
             document.getElementById('watchFormat').textContent = `https://www.youtube.com/watch?v=${videoId}`;
@@ -309,6 +380,8 @@
                     // フォールバック方法
                     const el = document.createElement('textarea');
                     el.value = text;
+                    el.style.position = 'absolute';
+                    el.style.left = '-9999px';
                     document.body.appendChild(el);
                     el.select();
                     document.execCommand('copy');
@@ -325,6 +398,19 @@
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
+        }
+        
+        function showStatusMessage(message, type) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = 'status-message';
+            statusElement.classList.add(type + '-message');
+            statusElement.classList.remove('hidden');
+        }
+        
+        function hideStatusMessage() {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.classList.add('hidden');
         }
     </script>
 </body>
