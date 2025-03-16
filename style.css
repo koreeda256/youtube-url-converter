@@ -95,10 +95,9 @@ button:hover {
 .result-container h2 {
     margin-top: 0;
     margin-bottom: 20px;
-    font-size: 1.2em;
-    color: #333;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #e5e5e5;
+    color: #0f0f0f;
+    font-size: 20px;
+    text-align: center;
 }
 .result-item {
     margin-bottom: 25px;
@@ -246,6 +245,29 @@ button:hover {
     color: #065FD4;
     border: 1px solid #bbdefb;
 }
+.thumbnail-container {
+    margin-bottom: 20px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+    transition: opacity 0.3s ease;
+}
+.thumbnail-container.hidden {
+    display: none;
+}
+.video-thumbnail {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.thumbnail-title {
+    margin-top: 10px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #0f0f0f;
+}
 @media (max-width: 600px) {
     body {
         padding: 10px;
@@ -320,8 +342,7 @@ button:hover {
     }
 
     .result-container h2 {
-        color: #fff;
-        border-bottom-color: #333333;
+        color: #f1f1f1;
     }
 
     .result-item {
@@ -366,5 +387,13 @@ button:hover {
     }
     .clear-btn:hover {
         color: #fff;
+    }
+
+    .thumbnail-container {
+        background-color: #2a2a2a;
+    }
+
+    .thumbnail-title {
+        color: #f1f1f1;
     }
 }
