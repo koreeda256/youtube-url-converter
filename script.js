@@ -38,6 +38,9 @@ function convertUrl() {
     "shortFormat"
   ).textContent = `https://youtu.be/${videoId}`;
 
+  // サムネイルを表示
+  displayThumbnail(videoId);
+
   // 結果を表示
   document.getElementById("resultContainer").classList.remove("hidden");
 }
@@ -89,6 +92,50 @@ function extractVideoId(url) {
   }
 
   return videoId;
+}
+
+/**
+ * YouTubeのサムネイルを表示
+ * @param {string} videoId - YouTube動画ID
+ */
+function displayThumbnail(videoId) {
+  if (!videoId) return;
+
+  // サムネイル画像のURLを設定（高品質版）
+  const thumbnailUrl = `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`;
+
+  // サムネイル画像を設定
+  const thumbnailImg = document.getElementById("videoThumbnail");
+  thumbnailImg.src = thumbnailUrl;
+  thumbnailImg.onerror = function () {
+    // エラー時はサムネイルコンテナを非表示
+    document.getElementById("thumbnailContainer").classList.add("hidden");
+  };
+
+  // サムネイル画像が読み込まれたらコンテナを表示
+  thumbnailImg.onload = function () {
+    document.getElementById("thumbnailContainer").classList.remove("hidden");
+
+    // 動画タイトルを取得（OEmbed APIを使用）
+    fetch(
+      `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("動画情報の取得に失敗しました");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // タイトルを表示
+        document.getElementById("thumbnailTitle").textContent = data.title;
+      })
+      .catch((error) => {
+        console.error("動画情報取得エラー:", error);
+        // エラー時はタイトルを非表示
+        document.getElementById("thumbnailTitle").textContent = "";
+      });
+  };
 }
 
 /**
