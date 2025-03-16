@@ -1,0 +1,370 @@
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    color: #0f0f0f;
+    transition: background-color 0.3s, color 0.3s;
+}
+h1 {
+    color: #FF0000;
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 28px;
+    white-space: nowrap;
+}
+h1 a {
+    color: #FF0000;
+    text-decoration: none;
+}
+h1 span {
+    display: block;
+}
+.container {
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #0f0f0f;
+}
+.input-container {
+    position: relative;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #e5e5e5;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.clear-btn {
+    background: none;
+    border: none;
+    color: #777;
+    cursor: pointer;
+    padding: 8px;
+    margin: 0;
+    width: auto;
+    font-size: 18px;
+    line-height: 1;
+    transition: color 0.3s;
+}
+.clear-btn:hover {
+    color: #333;
+    background: none;
+    transform: none;
+    box-shadow: none;
+}
+button {
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s;
+    width: 100%;
+    margin-bottom: 20px;
+}
+button:hover {
+    background-color: #CC0000;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.result-container {
+    margin-top: 10px;
+    background: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    border: 1px solid #e5e5e5;
+}
+.result-container h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.2em;
+    color: #333;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e5e5e5;
+}
+.result-item {
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(229, 229, 229, 0.8);
+    position: relative;
+}
+.result-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+.result-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 4px;
+}
+.result-label {
+    font-weight: 600;
+    color: #0f0f0f;
+    margin-right: 4px;
+}
+.discord-badge {
+    background-color: #5865F2;
+    color: white;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    height: 20px;
+}
+.discord-icon {
+    width: 14px;
+    height: 14px;
+    margin-right: 4px;
+    display: inline-block;
+    vertical-align: middle;
+}
+.result-value {
+    padding: 12px;
+    background: #f8f8f8;
+    border: 2px solid #e5e5e5;
+    border-radius: 6px;
+    word-break: break-all;
+    margin-bottom: 15px;
+    font-family: monospace;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+.action-row {
+    display: flex;
+    align-items: center;
+}
+.copy-btn {
+    background-color: #065FD4;
+    width: auto;
+    padding: 8px 15px;
+    font-size: 14px;
+    margin-right: 10px;
+    transition: all 0.3s;
+}
+.copy-btn:hover {
+    background-color: #0546a3;
+}
+.copy-btn.copied {
+    background-color: #2ecc71;
+}
+.copy-btn.copied:hover {
+    background-color: #27ae60;
+}
+.hidden {
+    display: none;
+}
+.footer {
+    margin-top: 30px;
+    text-align: center;
+    font-size: 14px;
+    color: #aaaaaa;
+}
+.tooltip {
+    position: relative;
+    display: inline-block;
+    margin-left: 2px;
+    cursor: help;
+}
+.tooltip .tooltip-icon {
+    background-color: #777;
+    color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: bold;
+}
+.tooltip .tooltip-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #1a1a1a;
+    color: #ffffff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-weight: normal;
+    font-size: 12px;
+    border: 1px solid #333333;
+}
+.tooltip:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+.status-message {
+    text-align: center;
+    padding: 12px;
+    margin: 0 0 10px 0;
+    border-radius: 6px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+.status-message.show {
+    opacity: 1;
+}
+.status-message.hidden {
+    opacity: 0;
+}
+.error-message {
+    background-color: #ffebee;
+    color: #d32f2f;
+    border: 1px solid #ffcdd2;
+}
+.info-message {
+    background-color: #e3f2fd;
+    color: #065FD4;
+    border: 1px solid #bbdefb;
+}
+@media (max-width: 600px) {
+    body {
+        padding: 10px;
+    }
+    .container {
+        padding: 15px;
+    }
+    h1 {
+        font-size: 24px;
+    }
+    .result-header {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+    .discord-badge {
+        margin: 0;
+    }
+    .tooltip {
+        margin: 0;
+    }
+    .action-row {
+        margin-bottom: 0;
+    }
+}
+@media (min-width: 601px) {
+    .action-row {
+        margin-bottom: 0;
+    }
+}
+@media (max-width: 400px) {
+    .action-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .copy-btn {
+        margin-bottom: 10px;
+        width: 100%;
+    }
+    h1 {
+        font-size: 20px;
+    }
+}
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #0f0f0f;
+        color: #ffffff;
+    }
+
+    .container {
+        background: #1a1a1a;
+        box-shadow: 0 2px 15px rgba(0,0,0,0.2);
+    }
+
+    label {
+        color: #ffffff;
+    }
+
+    input {
+        background-color: #1a1a1a;
+        border-color: #333333;
+        color: #ffffff;
+    }
+
+    input:focus {
+        border-color: #065FD4;
+        box-shadow: 0 0 0 3px rgba(6, 95, 212, 0.2);
+    }
+
+    .result-container {
+        background: #1a1a1a;
+        border-color: #333333;
+    }
+
+    .result-container h2 {
+        color: #fff;
+        border-bottom-color: #333333;
+    }
+
+    .result-item {
+        border-bottom-color: rgba(51, 51, 51, 0.8);
+    }
+
+    .result-label {
+        color: #ffffff;
+    }
+
+    .result-value {
+        background-color: #2a2a2a;
+        border-color: #333333;
+        color: #e0e0e0;
+    }
+
+    .footer {
+        color: #aaaaaa;
+    }
+
+    .tooltip .tooltip-text {
+        background-color: #1a1a1a;
+        border: 1px solid #333333;
+    }
+
+    .status-message {
+        border: none;
+    }
+
+    .error-message {
+        background-color: #3d1f1f;
+        color: #ff8a8a;
+    }
+
+    .info-message {
+        background-color: #1a2b4d;
+        color: #8ab4f8;
+    }
+
+    .clear-btn {
+        color: #aaa;
+    }
+    .clear-btn:hover {
+        color: #fff;
+    }
+}

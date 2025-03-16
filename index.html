@@ -3,390 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="YouTube URLを様々な形式に変換するシンプルなツール。Discord対応形式も含みます。">
+    <meta name="keywords" content="YouTube, URL, 変換, Discord, Watch Together">
+    <meta name="author" content="koreeda256">
     <title>YouTube URL 変換ツール</title>
-    <style>
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #ffffff;
-            color: #0f0f0f;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        h1 {
-            color: #FF0000;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            white-space: nowrap;
-        }
-        h1 span {
-            display: block;
-        }
-        .container {
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 15px rgba(0,0,0,0.08);
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #0f0f0f;
-        }
-        .input-container {
-            position: relative;
-            display: flex;
-            gap: 8px;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        input {
-            flex: 1;
-            padding: 12px;
-            border: 2px solid #e5e5e5;
-            border-radius: 6px;
-            font-size: 16px;
-            box-sizing: border-box;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-        .clear-btn {
-            background: none;
-            border: none;
-            color: #777;
-            cursor: pointer;
-            padding: 8px;
-            margin: 0;
-            width: auto;
-            font-size: 18px;
-            line-height: 1;
-            transition: color 0.3s;
-        }
-        .clear-btn:hover {
-            color: #333;
-            background: none;
-            transform: none;
-            box-shadow: none;
-        }
-        button {
-            background-color: #FF0000;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: all 0.3s;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-        button:hover {
-            background-color: #CC0000;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        .result-container {
-            margin-top: 10px;
-            background: #ffffff;
-            border-radius: 8px;
-            padding: 20px;
-            border: 1px solid #e5e5e5;
-        }
-        .result-container h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            font-size: 1.2em;
-            color: #333;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #e5e5e5;
-        }
-        .result-item {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(229, 229, 229, 0.8);
-            position: relative;
-        }
-        .result-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        .result-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 8px;
-            gap: 4px;
-        }
-        .result-label {
-            font-weight: 600;
-            color: #0f0f0f;
-            margin-right: 4px;
-        }
-        .discord-badge {
-            background-color: #5865F2;
-            color: white;
-            font-size: 12px;
-            padding: 3px 8px;
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            height: 20px;
-        }
-        .discord-icon {
-            width: 14px;
-            height: 14px;
-            margin-right: 4px;
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .result-value {
-            padding: 12px;
-            background: #f8f8f8;
-            border: 2px solid #e5e5e5;
-            border-radius: 6px;
-            word-break: break-all;
-            margin-bottom: 15px;
-            font-family: monospace;
-            font-size: 14px;
-            transition: all 0.3s;
-        }
-        .action-row {
-            display: flex;
-            align-items: center;
-        }
-        .copy-btn {
-            background-color: #065FD4;
-            width: auto;
-            padding: 8px 15px;
-            font-size: 14px;
-            margin-right: 10px;
-            transition: all 0.3s;
-        }
-        .copy-btn:hover {
-            background-color: #0546a3;
-        }
-        .copy-btn.copied {
-            background-color: #2ecc71;
-        }
-        .copy-btn.copied:hover {
-            background-color: #27ae60;
-        }
-        .hidden {
-            display: none;
-        }
-        .footer {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 14px;
-            color: #aaaaaa;
-        }
-        .tooltip {
-            position: relative;
-            display: inline-block;
-            margin-left: 2px;
-            cursor: help;
-        }
-        .tooltip .tooltip-icon {
-            background-color: #777;
-            color: white;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            font-weight: bold;
-        }
-        .tooltip .tooltip-text {
-            visibility: hidden;
-            width: 200px;
-            background-color: #1a1a1a;
-            color: #ffffff;
-            text-align: center;
-            border-radius: 6px;
-            padding: 5px;
-            position: absolute;
-            z-index: 1;
-            bottom: 125%;
-            left: 50%;
-            margin-left: -100px;
-            opacity: 0;
-            transition: opacity 0.3s;
-            font-weight: normal;
-            font-size: 12px;
-            border: 1px solid #333333;
-        }
-        .tooltip:hover .tooltip-text {
-            visibility: visible;
-            opacity: 1;
-        }
-        .status-message {
-            text-align: center;
-            padding: 12px;
-            margin: 0 0 10px 0;
-            border-radius: 6px;
-            font-weight: 600;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .status-message.show {
-            opacity: 1;
-        }
-        .status-message.hidden {
-            opacity: 0;
-        }
-        .error-message {
-            background-color: #ffebee;
-            color: #d32f2f;
-            border: 1px solid #ffcdd2;
-        }
-        .info-message {
-            background-color: #e3f2fd;
-            color: #065FD4;
-            border: 1px solid #bbdefb;
-        }
-        @media (max-width: 600px) {
-            body {
-                padding: 10px;
-            }
-            .container {
-                padding: 15px;
-            }
-            h1 {
-                font-size: 24px;
-            }
-            .result-header {
-                flex-wrap: wrap;
-                gap: 4px;
-            }
-            .discord-badge {
-                margin: 0;
-            }
-            .tooltip {
-                margin: 0;
-            }
-            .action-row {
-                margin-bottom: 0;
-            }
-        }
-        @media (min-width: 601px) {
-            .action-row {
-                margin-bottom: 0;
-            }
-        }
-        @media (max-width: 400px) {
-            .action-row {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .copy-btn {
-                margin-bottom: 10px;
-                width: 100%;
-            }
-            h1 {
-                font-size: 20px;
-            }
-        }
-        @media (prefers-color-scheme: dark) {
-            body {
-                background-color: #0f0f0f;
-                color: #ffffff;
-            }
-
-            .container {
-                background: #1a1a1a;
-                box-shadow: 0 2px 15px rgba(0,0,0,0.2);
-            }
-
-            label {
-                color: #ffffff;
-            }
-
-            input {
-                background-color: #1a1a1a;
-                border-color: #333333;
-                color: #ffffff;
-            }
-
-            input:focus {
-                border-color: #065FD4;
-                box-shadow: 0 0 0 3px rgba(6, 95, 212, 0.2);
-            }
-
-            .result-container {
-                background: #1a1a1a;
-                border-color: #333333;
-            }
-
-            .result-container h2 {
-                color: #fff;
-                border-bottom-color: #333333;
-            }
-
-            .result-item {
-                border-bottom-color: rgba(51, 51, 51, 0.8);
-            }
-
-            .result-label {
-                color: #ffffff;
-            }
-
-            .result-value {
-                background-color: #2a2a2a;
-                border-color: #333333;
-                color: #e0e0e0;
-            }
-
-            .footer {
-                color: #aaaaaa;
-            }
-
-            .tooltip .tooltip-text {
-                background-color: #1a1a1a;
-                border: 1px solid #333333;
-            }
-
-            .status-message {
-                border: none;
-            }
-
-            .error-message {
-                background-color: #3d1f1f;
-                color: #ff8a8a;
-            }
-
-            .info-message {
-                background-color: #1a2b4d;
-                color: #8ab4f8;
-            }
-
-            .clear-btn {
-                color: #aaa;
-            }
-            .clear-btn:hover {
-                color: #fff;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1><a href="#" style="color: #FF0000; text-decoration: none;">YouTube URL 変換ツール</a></h1>
+        <h1><a href="#">YouTube URL 変換ツール</a></h1>
 
         <div>
             <label for="youtubeUrl">YouTube URLを入力：</label>
             <div class="input-container">
-                <input type="text" id="youtubeUrl" placeholder="例: https://www.youtube.com/watch?v=xxxx" onkeypress="handleKeyPress(event)">
-                <button class="clear-btn" onclick="clearInput()" title="入力をクリア">×</button>
+                <input type="text" id="youtubeUrl" placeholder="https://www.youtube.com/watch?v=xxxx" onkeypress="handleKeyPress(event)" aria-label="YouTube URL入力欄">
+                <button class="clear-btn" onclick="clearInput()" title="入力をクリア" aria-label="入力をクリア">×</button>
             </div>
-            <button onclick="convertUrl()">変換</button>
+            <button onclick="convertUrl()" aria-label="URLを変換">変換</button>
         </div>
 
-        <div id="statusMessage" class="status-message hidden"></div>
+        <div id="statusMessage" class="status-message hidden" role="alert" aria-live="polite"></div>
 
         <div id="resultContainer" class="result-container hidden">
             <h2>変換結果</h2>
@@ -395,7 +31,7 @@
                 <div class="result-header">
                     <div class="result-label"><code>watch?v=</code> 形式</div>
                     <div class="discord-badge">
-                        <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff">
+                        <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff" aria-hidden="true">
                             <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                         </svg>
                         Discord対応
@@ -407,7 +43,7 @@
                 </div>
                 <div id="watchFormat" class="result-value"></div>
                 <div class="action-row">
-                    <button onclick="copyToClipboard('watchFormat', this)" class="copy-btn">コピー</button>
+                    <button onclick="copyToClipboard('watchFormat', this)" class="copy-btn" aria-label="watch形式のURLをコピー">コピー</button>
                 </div>
             </div>
 
@@ -417,7 +53,7 @@
                 </div>
                 <div id="liveFormat" class="result-value"></div>
                 <div class="action-row">
-                    <button onclick="copyToClipboard('liveFormat', this)" class="copy-btn">コピー</button>
+                    <button onclick="copyToClipboard('liveFormat', this)" class="copy-btn" aria-label="live形式のURLをコピー">コピー</button>
                 </div>
             </div>
 
@@ -425,7 +61,7 @@
                 <div class="result-header">
                     <div class="result-label">短縮URL (<code>youtu.be</code>)</div>
                     <div class="discord-badge">
-                        <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff">
+                        <svg class="discord-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 127.14 96.36" fill="#fff" aria-hidden="true">
                             <path d="M107.7,8.07A105.15,105.15,0,0,0,81.47,0a72.06,72.06,0,0,0-3.36,6.83A97.68,97.68,0,0,0,49,6.83,72.37,72.37,0,0,0,45.64,0,105.89,105.89,0,0,0,19.39,8.09C2.79,32.65-1.71,56.6.54,80.21h0A105.73,105.73,0,0,0,32.71,96.36,77.7,77.7,0,0,0,39.6,85.25a68.42,68.42,0,0,1-10.85-5.18c.91-.66,1.8-1.34,2.66-2a75.57,75.57,0,0,0,64.32,0c.87.71,1.76,1.39,2.66,2a68.68,68.68,0,0,1-10.87,5.19,77,77,0,0,0,6.89,11.1A105.25,105.25,0,0,0,126.6,80.22h0C129.24,52.84,122.09,29.11,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53s5-12.74,11.43-12.74S54,46,53.89,53,48.84,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.25,60,73.25,53s5-12.74,11.44-12.74S96.23,46,96.12,53,91.08,65.69,84.69,65.69Z"/>
                         </svg>
                         Discord対応
@@ -437,7 +73,7 @@
                 </div>
                 <div id="shortFormat" class="result-value"></div>
                 <div class="action-row">
-                    <button onclick="copyToClipboard('shortFormat', this)" class="copy-btn">コピー</button>
+                    <button onclick="copyToClipboard('shortFormat', this)" class="copy-btn" aria-label="短縮URLをコピー">コピー</button>
                 </div>
             </div>
         </div>
@@ -447,138 +83,6 @@
         <p>© 2025 koreeda256 · <a href="https://github.com/koreeda256/youtube-url-converter" style="color: inherit; text-decoration: underline;">GitHub</a></p>
     </div>
 
-    <script>
-        function handleKeyPress(event) {
-            if (event.key === 'Enter') {
-                convertUrl();
-            }
-        }
-
-        function convertUrl() {
-            const url = document.getElementById('youtubeUrl').value.trim();
-            if (!url) {
-                showStatusMessage('URLを入力してください', 'error');
-                return;
-            }
-
-            let videoId = extractVideoId(url);
-
-            if (!videoId) {
-                showStatusMessage('有効なYouTube URLを入力してください', 'error');
-                return;
-            }
-
-            // ステータスメッセージをクリア
-            hideStatusMessage();
-
-            // 各形式のURLを設定
-            document.getElementById('watchFormat').textContent = `https://www.youtube.com/watch?v=${videoId}`;
-            document.getElementById('liveFormat').textContent = `https://www.youtube.com/live/${videoId}`;
-            document.getElementById('shortFormat').textContent = `https://youtu.be/${videoId}`;
-
-            // 結果を表示
-            document.getElementById('resultContainer').classList.remove('hidden');
-        }
-
-        function extractVideoId(url) {
-            let videoId = '';
-
-            // watch?v= 形式
-            if (url.includes('watch?v=')) {
-                const match = url.match(/[?&]v=([^&#]*)/);
-                if (match && match[1]) {
-                    videoId = match[1];
-                }
-            }
-            // live/ 形式
-            else if (url.includes('/live/')) {
-                const match = url.match(/\/live\/([^/?&#]*)/);
-                if (match && match[1]) {
-                    videoId = match[1];
-                }
-            }
-            // youtu.be 形式
-            else if (url.includes('youtu.be/')) {
-                const match = url.match(/youtu\.be\/([^/?&#]*)/);
-                if (match && match[1]) {
-                    videoId = match[1];
-                }
-            }
-
-            return videoId;
-        }
-
-        function copyToClipboard(elementId, button) {
-            const text = document.getElementById(elementId).textContent;
-            navigator.clipboard.writeText(text)
-                .then(() => {
-                    // ボタンのテキストとスタイルを変更
-                    button.textContent = 'コピーしました！';
-                    button.classList.add('copied');
-
-                    // 3秒後に元に戻す
-                    setTimeout(() => {
-                        button.textContent = 'コピー';
-                        button.classList.remove('copied');
-                    }, 3000);
-                })
-                .catch(err => {
-                    console.error('コピーに失敗しました', err);
-                    // フォールバック方法
-                    const el = document.createElement('textarea');
-                    el.value = text;
-                    el.style.position = 'absolute';
-                    el.style.left = '-9999px';
-                    document.body.appendChild(el);
-                    el.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(el);
-                    // ボタンのテキストとスタイルを変更
-                    button.textContent = 'コピーしました！';
-                    button.classList.add('copied');
-
-                    // 3秒後に元に戻す
-                    setTimeout(() => {
-                        button.textContent = 'コピー';
-                        button.classList.remove('copied');
-                    }, 3000);
-                });
-        }
-
-        function showStatusMessage(message, type) {
-            const statusElement = document.getElementById('statusMessage');
-            statusElement.textContent = message;
-            statusElement.className = 'status-message';
-            statusElement.classList.add(type + '-message');
-            statusElement.classList.remove('hidden');
-            // フェードイン効果のために少し遅延を入れる
-            setTimeout(() => {
-                statusElement.classList.add('show');
-            }, 10);
-
-            // 3秒後に通知を非表示にする
-            setTimeout(() => {
-                statusElement.classList.remove('show');
-                // フェードアウト完了後に非表示にする
-                setTimeout(() => {
-                    statusElement.classList.add('hidden');
-                }, 300);
-            }, 3000);
-        }
-
-        function hideStatusMessage() {
-            const statusElement = document.getElementById('statusMessage');
-            statusElement.classList.remove('show');
-            // フェードアウト完了後に非表示にする
-            setTimeout(() => {
-                statusElement.classList.add('hidden');
-            }, 300);
-        }
-
-        function clearInput() {
-            document.getElementById('youtubeUrl').value = '';
-            document.getElementById('youtubeUrl').focus();
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
